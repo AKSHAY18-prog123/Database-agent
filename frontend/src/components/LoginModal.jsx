@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Database, Lock, Key, Check, AlertCircle, LogIn, Link, Settings } from 'lucide-react';
+import { Database, Lock, Key, Check, AlertCircle, LogIn, Link, Settings, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import axios from 'axios';
 
 export function LoginModal({ isOpen, onLoginSuccess, API_BASE }) {
   const [connectMode, setConnectMode] = useState('uri'); // 'uri' | 'manual'
   const [dbType, setDbType] = useState('mysql'); // 'mysql' | 'postgres'
+  const [showHelpGuide, setShowHelpGuide] = useState(false);
   
   // Connection String state
   const [connectionUri, setConnectionUri] = useState('');
@@ -81,8 +82,8 @@ export function LoginModal({ isOpen, onLoginSuccess, API_BASE }) {
 
   return (
     <div className="modal-overlay">
-      <div className="modal-card" style={{ maxWidth: '520px', border: '1px solid rgba(59, 130, 246, 0.4)' }}>
-        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+      <div className="modal-card" style={{ maxWidth: '540px', border: '1px solid rgba(59, 130, 246, 0.4)' }}>
+        <div style={{ textAlign: 'center', marginBottom: '16px' }}>
           <div style={{
             width: '54px',
             height: '54px',
@@ -93,18 +94,84 @@ export function LoginModal({ isOpen, onLoginSuccess, API_BASE }) {
             justifyContent: 'center',
             color: 'white',
             boxShadow: '0 0 25px rgba(6, 182, 212, 0.4)',
-            marginBottom: '10px'
+            marginBottom: '8px'
           }}>
             <Database size={28} />
           </div>
           <h2 style={{ fontSize: '1.4rem', color: 'white', fontWeight: 800 }}>Universal Database Agent Login</h2>
-          <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+          <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '2px' }}>
             Connect to your 🐬 <strong>MySQL</strong> or 🐘 <strong>PostgreSQL</strong> database.
           </p>
         </div>
 
+        {/* Step-by-Step Connection Guide Toggle Button */}
+        <button
+          type="button"
+          onClick={() => setShowHelpGuide(!showHelpGuide)}
+          style={{
+            width: '100%',
+            padding: '8px 12px',
+            borderRadius: '8px',
+            background: 'rgba(59, 130, 246, 0.12)',
+            border: '1px solid rgba(59, 130, 246, 0.3)',
+            color: '#93c5fd',
+            fontSize: '0.8rem',
+            fontWeight: 600,
+            cursor: 'pointer',
+            marginBottom: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px'
+          }}
+        >
+          <HelpCircle size={14} />
+          <span>{showHelpGuide ? 'Hide Setup Guide' : '💡 Need Help Connecting? (3-Step Setup Guide)'}</span>
+          {showHelpGuide ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+        </button>
+
+        {/* Interactive Step-by-Step Guide Panel */}
+        {showHelpGuide && (
+          <div style={{
+            background: 'rgba(11, 17, 32, 0.95)',
+            border: '1px solid rgba(59, 130, 246, 0.4)',
+            borderRadius: '10px',
+            padding: '14px',
+            marginBottom: '18px',
+            fontSize: '0.8rem',
+            lineHeight: 1.5,
+            color: '#d1d5db'
+          }}>
+            <h4 style={{ color: '#93c5fd', fontWeight: 700, marginBottom: '8px', fontSize: '0.85rem' }}>
+              🌐 Step-by-Step Connection Guide
+            </h4>
+
+            <div style={{ marginBottom: '12px', paddingBottom: '10px', borderBottom: '1px dashed rgba(255,255,255,0.1)' }}>
+              <strong style={{ color: '#34d399', display: 'block', marginBottom: '2px' }}>
+                Option A: Connecting via Vercel Link (Cloud Database)
+              </strong>
+              <ol style={{ paddingLeft: '18px', margin: '4px 0 0 0' }}>
+                <li>Get a free cloud database from <strong>Neon.tech</strong> (PostgreSQL) or <strong>Aiven / Supabase</strong>.</li>
+                <li>Copy your 1-line connection URL (e.g. <code>postgres://user:pass@ep-db.neon.tech:5432/main</code>).</li>
+                <li>Select <strong>1-Click Connection String</strong> tab below, paste the URL, and click <strong>Connect Database</strong>!</li>
+              </ol>
+            </div>
+
+            <div>
+              <strong style={{ color: '#60a5fa', display: 'block', marginBottom: '2px' }}>
+                Option B: Connecting to Local Database (127.0.0.1 on your computer)
+              </strong>
+              <ol style={{ paddingLeft: '18px', margin: '4px 0 0 0' }}>
+                <li>Ensure your MySQL or PostgreSQL service is turned ON.</li>
+                <li>Double-click <code>start_agent.bat</code> in your project folder to open <code>http://localhost:5173</code>.</li>
+                <li>Select <strong>Manual Details</strong> tab below, enter <code>127.0.0.1</code> and your password to connect!</li>
+              </ol>
+            </div>
+          </div>
+        )}
+
         {/* Mode Selector Tabs */}
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', background: 'rgba(255,255,255,0.03)', padding: '4px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '18px', background: 'rgba(255,255,255,0.03)', padding: '4px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <button
             type="button"
             onClick={() => setConnectMode('uri')}
@@ -182,7 +249,7 @@ export function LoginModal({ isOpen, onLoginSuccess, API_BASE }) {
                 required
               />
               <p style={{ fontSize: '0.74rem', color: 'var(--text-dim)', marginTop: '6px', lineHeight: 1.4 }}>
-                💡 <strong>Non-Tech User Tip:</strong> Copy & paste 1 connection line from Neon.tech, Supabase, Aiven, Railway, or your host. The app auto-detects MySQL vs PostgreSQL!
+                💡 <strong>Vercel Connection Tip:</strong> Copy & paste 1 connection line from Neon.tech, Supabase, Aiven, or Railway. Auto-detects MySQL vs PostgreSQL!
               </p>
             </div>
           ) : (
