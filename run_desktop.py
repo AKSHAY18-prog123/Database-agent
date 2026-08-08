@@ -7,11 +7,20 @@ import time
 import uvicorn
 from fastapi.staticfiles import StaticFiles
 
-# Fix Windows GUI windowed mode stdout/stderr streams for Uvicorn logger
+# Ensure stdout and stderr exist for GUI windowed mode
 if sys.stdout is None:
-    sys.stdout = io.StringIO()
+    sys.stdout = open(os.devnull, 'w')
 if sys.stderr is None:
-    sys.stderr = io.StringIO()
+    sys.stderr = open(os.devnull, 'w')
+
+# Custom logging dict that disables uvicorn terminal formatters in windowed mode
+NO_LOG_CONFIG = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {},
+    "handlers": {},
+    "loggers": {}
+}
 
 # Import FastAPI app from backend main
 from backend.main import app
@@ -28,9 +37,9 @@ if os.path.exists(frontend_dist):
     app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="static")
 
 def open_browser():
-    time.sleep(1.5)
+    time.sleep(1.2)
     webbrowser.open("http://127.0.0.1:8000")
 
 if __name__ == "__main__":
     threading.Thread(target=open_browser, daemon=True).start()
-    uvicorn.run(app, host="127.0.0.1", port=8000, log_config=None)
+    uvicorn.run(app, host="127.0.0.1", port=8000, log_config=NO_LOG_CONFIG)
