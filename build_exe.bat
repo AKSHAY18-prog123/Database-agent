@@ -17,7 +17,7 @@ if %errorlevel% neq 0 (
 echo      ✅ Python environment verified.
 echo.
 
-echo [2/4] Verifying PyInstaller & packaging tools...
+echo [2/4] Verifying packaging tools...
 pip install pyinstaller pyinstaller-hooks-contrib >nul 2>&1
 echo      ✅ Packaging tools ready.
 echo.
@@ -29,15 +29,7 @@ echo.
 
 echo [4/4] Packaging Python Backend & React Frontend into DatabaseAgent.exe...
 echo      (Excluding heavy unused ML modules for ultra-fast performance...)
-pyinstaller --noconfirm --onedir --windowed ^
-  --exclude-module torch ^
-  --exclude-module torchvision ^
-  --exclude-module tensorflow ^
-  --exclude-module scipy ^
-  --exclude-module matplotlib ^
-  --exclude-module notebook ^
-  --add-data "frontend/dist;frontend/dist" ^
-  --name "DatabaseAgent" run_desktop.py
+pyinstaller --noconfirm --onedir --windowed --exclude-module torch --exclude-module torchvision --exclude-module tensorflow --exclude-module scipy --exclude-module matplotlib --exclude-module notebook --add-data "frontend/dist;frontend/dist" --name "DatabaseAgent" run_desktop.py
 
 echo.
 echo =========================================================
