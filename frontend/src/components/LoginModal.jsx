@@ -163,7 +163,7 @@ export function LoginModal({ isOpen, onLoginSuccess, API_BASE }) {
               </strong>
               <ol style={{ paddingLeft: '18px', margin: '4px 0 0 0' }}>
                 <li>Ensure your MySQL or PostgreSQL service is turned ON.</li>
-                <li>Double-click <code>start_agent.bat</code> in your project folder to open <code>http://localhost:5173</code>.</li>
+                <li>Download project ZIP from GitHub (or git clone), then double-click <code>start_agent.bat</code> to open <code>http://localhost:5173</code>.</li>
                 <li>Select <strong>Manual Details</strong> tab below, enter <code>127.0.0.1</code> and your password to connect!</li>
               </ol>
             </div>
