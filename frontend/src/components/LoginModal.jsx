@@ -81,8 +81,8 @@ export function LoginModal({ isOpen, onLoginSuccess, API_BASE }) {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-card" style={{ maxWidth: '540px', border: '1px solid rgba(59, 130, 246, 0.4)' }}>
+    <div className="modal-overlay" style={{ overflowY: 'auto', padding: '24px 16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="modal-card" style={{ maxWidth: '540px', maxHeight: '85vh', overflowY: 'auto', border: '1px solid rgba(59, 130, 246, 0.4)' }}>
         <div style={{ textAlign: 'center', marginBottom: '16px' }}>
           <div style={{
             width: '54px',
