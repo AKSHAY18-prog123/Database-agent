@@ -1,10 +1,17 @@
 import os
 import sys
+import io
 import webbrowser
 import threading
 import time
 import uvicorn
 from fastapi.staticfiles import StaticFiles
+
+# Fix Windows GUI windowed mode stdout/stderr streams for Uvicorn logger
+if sys.stdout is None:
+    sys.stdout = io.StringIO()
+if sys.stderr is None:
+    sys.stderr = io.StringIO()
 
 # Import FastAPI app from backend main
 from backend.main import app
@@ -25,11 +32,5 @@ def open_browser():
     webbrowser.open("http://127.0.0.1:8000")
 
 if __name__ == "__main__":
-    print("=========================================================")
-    print("   🚀 STARTING UNIVERSAL DATABASE AI AGENT DESKTOP APP  ")
-    print("=========================================================")
-    print("🌐 Web Interface: http://127.0.0.1:8000")
-    print("Press Ctrl+C to close.")
-    
     threading.Thread(target=open_browser, daemon=True).start()
-    uvicorn.run(app, host="127.0.0.1", port=8000, log_level="info")
+    uvicorn.run(app, host="127.0.0.1", port=8000, log_config=None)
