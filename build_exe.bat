@@ -27,7 +27,7 @@ cmd /c "cd frontend && npm run build"
 echo      ✅ React frontend built successfully.
 echo.
 
-echo [4/4] Packaging Python Backend & React Frontend into DatabaseAgent.exe...
+echo [4/4] Packaging Python Backend and React Frontend into DatabaseAgent.exe...
 echo      (Excluding heavy unused ML modules for ultra-fast performance...)
 pyinstaller --noconfirm --onedir --windowed --exclude-module torch --exclude-module torchvision --exclude-module tensorflow --exclude-module scipy --exclude-module matplotlib --exclude-module notebook --add-data "frontend/dist;frontend/dist" --name "DatabaseAgent" run_desktop.py
 
